@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QStandardPaths>
 #include <QProcess>
 #include <QDebug>
 
@@ -11,6 +12,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     if(dir.exists()) dir.mkdir("saved");
     saveFile = new QFile(qApp->applicationDirPath() + "\\saved\\saved.txt");
     load_data();
+
+
+    QFile dFile(QStandardPaths::locate(QStandardPaths::AppDataLocation, "..\\Unreal Engine\\UnrealBuildTool\\BuildConfiguration.xml"));
+    QFile sFile(qApp->applicationDirPath() + "\\saved\\BuildConfiguration.xml");
+    if(dFile.exists() && sFile.exists()) {
+        dFile.open(QIODevice::WriteOnly);
+        sFile.open(QIODevice::ReadOnly);
+
+        QTextStream dStream(&dFile);
+        QTextStream sStream(&sFile);
+
+        while(!sStream.atEnd()) {
+            dStream << sStream.readLine() << endl;
+        }
+    }
 }
 
 MainWindow::~MainWindow() {
