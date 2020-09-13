@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QFileDialog>
 #include <QProcess>
 #include <QDebug>
 
@@ -10,41 +9,76 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     QDir dir(qApp->applicationDirPath());
     if(dir.exists()) dir.mkdir("saved");
+    saveFile = new QFile(qApp->applicationDirPath() + "\\saved\\saved.txt");
+    load_data();
 }
 
 MainWindow::~MainWindow() {
+    delete saveFile;
     delete ui;
 }
 
-QString MainWindow::fetch_directory() {
+void MainWindow::load_data() {
+    if(saveFile->open(QIODevice::ReadOnly)) {
+        QTextStream stream(saveFile);
+        ui->engineDir->setText(stream.readLine());
+        ui->projectLoc->setText(stream.readLine());
+        ui->outputDir->setText(stream.readLine());
+    }
+    saveFile->close();
+}
+
+void MainWindow::save_data() {
+    if(saveFile->open(QIODevice::WriteOnly)) {
+        QTextStream stream(saveFile);
+        stream << ui->engineDir->text()  << endl <<
+                  ui->projectLoc->text() << endl <<
+                  ui->outputDir->text()  << endl;
+    }
+    saveFile->close();
+}
+
+QString MainWindow::fetch_directory(QString from) {
     QFileDialog::Options dialogOptions;
     dialogOptions|= QFileDialog::ShowDirsOnly;
     dialogOptions|= QFileDialog::DontResolveSymlinks;
 
-    return QFileDialog::getExistingDirectory(this, tr("Open Directory"), "C:/", dialogOptions);
+    return QFileDialog::getExistingDirectory(this, tr("Open Directory"), from, dialogOptions);
 }
 
-QString MainWindow::fetch_file() {
-    return QFileDialog::getOpenFileName(this, tr("Open UProject"), "C:/", tr("UProject Files (*.uproject)"));
+QString MainWindow::fetch_file(QString from) {
+    return QFileDialog::getOpenFileName(this, tr("Open UProject"), from, tr("UProject Files (*.uproject)"));
 }
 
 void MainWindow::on_pushButton_2_clicked() {
-    ui->engineDir->setText(fetch_directory());
+    QString fetchResult = fetch_directory(ui->engineDir->text());
+    if(!fetchResult.isEmpty()) {
+        ui->engineDir->setText(fetchResult);
+    }
+    save_data();
 }
 
 void MainWindow::on_pushButton_4_clicked() {
-    ui->projectLoc->setText(fetch_file());
+    QString fetchResult = fetch_file(ui->projectLoc->text());
+    if(!fetchResult.isEmpty()) {
+        ui->projectLoc->setText(fetchResult);
+    }
+    save_data();
 }
 
 void MainWindow::on_pushButton_5_clicked() {
-    ui->outputDir->setText(fetch_directory());
+    QString fetchResult = fetch_directory(ui->outputDir->text());
+    if(!fetchResult.isEmpty()) {
+        ui->outputDir->setText(fetchResult);
+    }
+    save_data();
 }
 
 void MainWindow::on_pushButton_clicked() {
     QProcess exec;
 
-    QString correctedProj = ui->projectLoc->text().replace('/', '\\');
     QString correctedEng  = ui->engineDir->text().replace('/', '\\');
+    QString correctedProj = ui->projectLoc->text().replace('/', '\\');
     QString correctedOut  = ui->outputDir->text().replace('/', '\\');
 
     exec.setWorkingDirectory(qApp->applicationDirPath());
@@ -55,4 +89,5 @@ void MainWindow::on_pushButton_clicked() {
 
     exec.start("cmd.exe", arguments);
     exec.waitForFinished();
+    save_data();
 }

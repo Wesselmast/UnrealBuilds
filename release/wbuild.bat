@@ -28,3 +28,4 @@ if not exist "%first%\Engine\Build\BatchFiles" (
 pushd %first%\Engine\Build\BatchFiles\
 call RunUAT BuildCookRun -project=%secnd%  -noP4 -platform=Win64 -clientconfig=Development -serverconfig=Development -cook -maps=AllMaps -compile -stage -pak -archive -archivedirectory=%third%
 popd
+exit(1)
