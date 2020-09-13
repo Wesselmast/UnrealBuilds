@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration xmlns="https://www.unrealengine.com/BuildConfiguration">
+	<BuildConfiguration>
+		<bUseIncrementalLinking>true</bUseIncrementalLinking>
+		<bAllowLTCG>false</bAllowLTCG>
+		<bAllowXGE>true</bAllowXGE>
+		<bXGENoWatchdogThread>false</bXGENoWatchdogThread>
+		<bAllowSNDBS>true</bAllowSNDBS>
+		<bAllowASLRInShipping>true</bAllowASLRInShipping>
+	</BuildConfiguration>
+</Configuration>
