@@ -237,14 +237,28 @@ color: #FFFFFF;</string>
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="styleSheet">
-         <string notr="true">background-color: #555555</string>
-        </property>
-        <property name="text">
-         <string>BUILD</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="styleSheet">
+           <string notr="true">background-color: #555555</string>
+          </property>
+          <property name="text">
+           <string>DEV BUILD</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="styleSheet">
+           <string notr="true">background-color: #555555</string>
+          </property>
+          <property name="text">
+           <string>SHIPPING BUILD</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>

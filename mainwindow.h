@@ -25,9 +25,12 @@ private slots:
 
     void on_pushButton_5_clicked();
 
+    void on_pushButton_3_clicked();
+
 private:
     QString fetch_directory(QString from);
     QString fetch_file(QString from);
+    void execute(QString wbuild);
     void save_data();
     void load_data();
 

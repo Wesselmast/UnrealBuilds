@@ -90,7 +90,7 @@ void MainWindow::on_pushButton_5_clicked() {
     save_data();
 }
 
-void MainWindow::on_pushButton_clicked() {
+void MainWindow::execute(QString wbuild) {
     QProcess exec;
 
     QString correctedEng  = ui->engineDir->text().replace('/', '\\');
@@ -99,11 +99,19 @@ void MainWindow::on_pushButton_clicked() {
 
     exec.setWorkingDirectory(qApp->applicationDirPath());
     QStringList arguments;
-    arguments << "/c start wbuild.bat " + correctedEng  + "#"
+    arguments << "/c start " + wbuild + ".bat " + correctedEng  + "#"
                                         + correctedProj + "#"
                                         + correctedOut  + "#";
 
     exec.start("cmd.exe", arguments);
     exec.waitForFinished();
     save_data();
+}
+
+void MainWindow::on_pushButton_clicked() {
+    execute("wbuild_dev");
+}
+
+void MainWindow::on_pushButton_3_clicked() {
+    execute("wbuild_shipping");
 }
